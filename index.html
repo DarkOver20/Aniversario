@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>6 Años de Amor 💖</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
+    <style>
+        /* ============================================================
+                   RESET Y ESTILOS GLOBALES
+                   ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fce4ec;
+            background: linear-gradient(145deg, #fce4ec 0%, #f3e5f5 50%, #e8eaf6 100%);
+            padding: 20px;
+            overflow-x: hidden;
+            color: #4a2c3a;
+        }
+
+        /* Fondo con partículas sutiles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 50%, rgba(255, 182, 193, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(216, 191, 216, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(255, 218, 185, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 720px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================================
+                   PANTALLA 1: SOBRE QUE SE ABRE
+                   ============================================================ */
+        #envelope-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        #envelope-screen.hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+        }
+
+        .envelope-wrapper {
+            cursor: pointer;
+            perspective: 800px;
+            margin-bottom: 30px;
+        }
+
+        .envelope {
+            width: 200px;
+            height: 140px;
+            background: #f8e8d0;
+            border-radius: 6px 6px 0 0;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .envelope:active {
+            transform: scale(0.95);
+        }
+
+        .envelope .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f8e8d0;
+            clip-path: polygon(0 0, 50% 60%, 100% 0);
+            border-radius: 6px 6px 0 0;
+            transform-origin: top center;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 2;
+            box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+        }
+
+        .envelope .body {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: #f0dcc0;
+            border-radius: 0 0 6px 6px;
+            box-shadow: inset 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .envelope .heart-seal {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.2rem;
+            z-index: 3;
+            color: #d4a373;
+            text-shadow: 0 2px 10px rgba(212, 163, 115, 0.4);
+            transition: all 0.5s ease;
+        }
+
+        .envelope.open .heart-seal {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+
+        .envelope .letter-peek {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 30%;
+            background: #fffdf7;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            z-index: 1;
+            transition: all 0.8s ease;
+        }
+
+        .envelope.open .letter-peek {
+            transform: translateX(-50%) translateY(-60px);
+            height: 50%;
+        }
+
+        .envelope-subtext {
+            font-weight: 300;
+            font-size: 1rem;
+            color: rgba(74, 44, 58, 0.6);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: pulseText 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseText {
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.04);
+            }
+        }
+
+        /* ============================================================
+                   PANTALLA 2: LA CARTA MÁGICA
+                   ============================================================ */
+        #letter-screen {
+            display: none;
+            flex-direction: column;
+            gap: 40px;
+            padding: 20px 0 40px;
+            animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        #letter-screen.visible {
+            display: flex;
+        }
+
+        @keyframes fadeSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== ENCABEZADO DE LA CARTA ===== */
+        .letter-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 182, 193, 0.2), transparent 60%),
+                radial-gradient(circle at 70% 60%, rgba(216, 191, 216, 0.15), transparent 60%);
+            pointer-events: none;
+        }
+
+        .letter-header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: #b56576;
+            margin-bottom: 4px;
+            position: relative;
+        }
+
+        .letter-header .sub-title {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: #6c4b5e;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .counter-box {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 60px;
+            padding: 12px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            position: relative;
+        }
+
+        .counter-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .counter-item .num {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #4a2c3a;
+            line-height: 1;
+        }
+
+        .counter-item .label {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(74, 44, 58, 0.5);
+            margin-top: 2px;
+        }
+
+        .greeting-text {
+            margin-top: 25px;
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: #4a2c3a;
+            text-align: left;
+            padding: 0 5px;
+            position: relative;
+            min-height: 100px;
+        }
+
+        .greeting-text .typewriter {
+            display: inline;
+            border-right: 2px solid #b56576;
+            animation: blinkCursor 0.8s step-end infinite;
+        }
+
+        @keyframes blinkCursor {
+            0%,
+            100% {
+                border-color: #b56576;
+            }
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        .greeting-text strong {
+            color: #b56576;
+            font-weight: 600;
+        }
+
+        .greeting-text .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: #b56576;
+            text-align: right;
+            margin-top: 15px;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ===== LÍNEA DE TIEMPO ===== */
+        .timeline-section {
+            width: 100%;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #b56576;
+            letter-spacing: 2px;
+        }
+
+        .section-title span {
+            font-size: 2rem;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: linear-gradient(to bottom, #f8c8d8, #b56576, #f8c8d8);
+            opacity: 0.5;
+            border-radius: 10px;
+        }
+
+        .timeline-item {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 18px;
+            padding: 18px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(4px) scale(1.01);
+            box-shadow: 0 8px 30px rgba(181, 101, 118, 0.1);
+        }
+
+        .timeline-item::before {
+            content: '✦';
+            position: absolute;
+            left: -24px;
+            top: 20px;
+            font-size: 0.9rem;
+            color: #b56576;
+            background: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 0 3px #fce4ec;
+            border: 1px solid #f8c8d8;
+        }
+
+        .timeline-item .year {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #b56576;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .timeline-item h3 {
+            font-size: 1.15rem;
+            margin: 4px 0 6px;
+            color: #4a2c3a;
+        }
+
+        .timeline-item p {
+            font-size: 0.92rem;
+            color: rgba(74, 44, 58, 0.7);
+            line-height: 1.5;
+        }
+
+        /* ============================================================
+                   NUEVO: CARRUSEL DE FOTOS (ÁLBUM INTERACTIVO)
+                   ============================================================ */
+        .carousel-section {
+            width: 100%;
+        }
+
+        .carousel-container {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10);
+            background: #fff;
+            touch-action: pan-y;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #f8f0e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* Botones de navegación */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 1.4rem;
+            color: #4a2c3a;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .carousel-btn:hover {
+            background: #fff;
+            box-shadow: 0 6px 25px rgba(181, 101, 118, 0.2);
+            transform: translateY(-50%) scale(1.05);
+            color: #b56576;
+        }
+
+        .carousel-btn:active {
+            transform: translateY(-50%) scale(0.92);
+        }
+
+        .carousel-btn.prev {
+            left: 12px;
+        }
+
+        .carousel-btn.next {
+            right: 12px;
+        }
+
+        /* Puntitos indicadores */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 18px 0 8px;
+            flex-wrap: wrap;
+        }
+
+        .carousel-dots .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d4c0c8;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            padding: 0;
+        }
+
+        .carousel-dots .dot.active {
+            background: #b56576;
+            transform: scale(1.25);
+            box-shadow: 0 0 20px rgba(181, 101, 118, 0.3);
+        }
+
+        /* Texto descriptivo debajo del carrusel */
+        .carousel-caption {
+            text-align: center;
+            padding: 10px 15px 5px;
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #4a2c3a;
+            min-height: 3.2rem;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            letter-spacing: 0.3px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+            border-radius: 16px;
+            margin-top: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .carousel-caption span {
+            display: inline-block;
+            transition: opacity 0.4s ease;
+        }
+
+        /* ===== PROMESA FINAL ===== */
+        .promise-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 35px 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+        }
+
+        .promise-card h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.4rem;
+            color: #4a2c3a;
+            margin-bottom: 12px;
+        }
+
+        .promise-card p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: rgba(74, 44, 58, 0.8);
+            font-style: italic;
+        }
+
+        .btn-magic {
+            margin-top: 25px;
+            background: #b56576;
+            border: none;
+            color: #fff;
+            padding: 16px 44px;
+            border-radius: 60px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(181, 101, 118, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-magic::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .btn-magic:hover::after {
+            opacity: 1;
+        }
+
+        .btn-magic:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(181, 101, 118, 0.4);
+            background: #a04f60;
+        }
+
+        .btn-magic:active {
+            transform: scale(0.95);
+        }
+
+        .btn-magic:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ===== REPRODUCTOR DE MÚSICA ===== */
+        .music-player {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 60px;
+            padding: 12px 18px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .music-player:hover {
+            transform: scale(1.04);
+            box-shadow: 0 12px 40px rgba(181, 101, 118, 0.15);
+        }
+
+        .music-player .icon {
+            font-size: 1.4rem;
+            line-height: 1;
+        }
+
+        .music-player .label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #4a2c3a;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== PARTÍCULAS FLOTANTES ===== */
+        .floating-particle {
+            position: fixed;
+            pointer-events: none;
+            font-size: 1.2rem;
+            z-index: 0;
+            opacity: 0.3;
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(720deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* ===== CORAZONES EXPLOSIÓN ===== */
+        .burst-heart {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2.5rem;
+            z-index: 9999;
+            animation: burstUp 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes burstUp {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.5) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.6) rotate(720deg);
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 500px) {
+            .envelope {
+                width: 160px;
+                height: 112px;
+            }
+            .envelope .heart-seal {
+                font-size: 1.6rem;
+            }
+            .letter-header h1 {
+                font-size: 2.4rem;
+            }
+            .counter-item .num {
+                font-size: 1.4rem;
+            }
+            .timeline {
+                padding-left: 26px;
+            }
+            .timeline-item::before {
+                left: -21px;
+                width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
+            }
+            .promise-card h2 {
+                font-size: 2rem;
+            }
+            .btn-magic {
+                padding: 14px 30px;
+                font-size: 1rem;
+            }
+            .music-player {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px 14px;
+            }
+            .music-player .label {
+                font-size: 0.65rem;
+            }
+            .carousel-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+            }
+            .carousel-btn.prev {
+                left: 6px;
+            }
+            .carousel-btn.next {
+                right: 6px;
+            }
+            .carousel-caption {
+                font-size: 0.95rem;
+                min-height: 2.8rem;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .counter-box {
+                gap: 12px;
+                padding: 10px 16px;
+            }
+            .carousel-slide {
+                aspect-ratio: 1 / 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================
+    PARTÍCULAS FLOTANTES (FONDO)
+    ============================================================ -->
+    <div id="particles-container"></div>
+
+    <!-- ============================================================
+    REPRODUCTOR DE MÚSICA
+    ============================================================ -->
+    <div class="music-player" id="musicToggle">
+        <span class="icon" id="musicIcon">🔇</span>
+        <span class="label" id="musicLabel">Silencio</span>
+    </div>
+
+    <div class="container">
+
+        <!-- ============================================================
+        PANTALLA 1: SOBRE
+        ============================================================ -->
+        <div id="envelope-screen">
+            <div class="envelope-wrapper" id="envelopeTrigger">
+                <div class="envelope" id="envelope">
+                    <div class="flap"></div>
+                    <div class="body"></div>
+                    <div class="heart-seal">❤️</div>
+                    <div class="letter-peek"></div>
+                </div>
+            </div>
+            <p class="envelope-subtext">✦ Toca el sobre para abrirlo mi amor✦</p>
+        </div>
+
+        <!-- ============================================================
+        PANTALLA 2: CARTA
+        ============================================================ -->
+        <div id="letter-screen">
+
+            <!-- ENCABEZADO -->
+            <div class="letter-header">
+                <h1>Mi Amor</h1>
+                <p class="sub-title">— Para Wendy—</p>
+
+                <div class="counter-box" id="counterBox">
+                    <!-- Lo rellena JS -->
+                </div>
+
+                <div class="greeting-text" id="greetingText">
+                    <!-- El texto se escribe con efecto máquina de escribir -->
+                </div>
+            </div>
+
+            <!-- ============================================================
+            NUEVO CARRUSEL DE FOTOS CON TEXTO DESCRIPTIVO
+            ============================================================ -->
+            <div class="carousel-section">
+                <h2 class="section-title"><span>✦</span> Nuestros Recuerdos <span>✦</span></h2>
+
+                <div class="carousel-container" id="carouselContainer">
+                    <div class="carousel-track" id="carouselTrack">
+                        <!-- Las imágenes y textos se inyectan desde JavaScript -->
+                    </div>
+
+                    <!-- Botones anterior / siguiente -->
+                    <button class="carousel-btn prev" id="prevBtn" aria-label="Anterior">‹</button>
+                    <button class="carousel-btn next" id="nextBtn" aria-label="Siguiente">›</button>
+                </div>
+
+                <!-- Puntitos indicadores -->
+                <div class="carousel-dots" id="carouselDots"></div>
+
+                <!-- Texto descriptivo de la imagen actual -->
+                <div class="carousel-caption" id="carouselCaption">
+                    <span id="captionText">Toca las flechas para ver nuestros momentos ✨</span>
+                </div>
+            </div>
+
+            <!-- PROMESA -->
+            <div class="promise-card">
+                <h2>💫 Te amo</h2>
+                <p>
+                    "Te elijo hoy y todos los días. Eres esa persona maravillosa con la que amo compartir la vida: cada abrazo, cada beso, cada conversación y hasta las bromas más simples. Contigo soy feliz. "
+                </p>
+                <button class="btn-magic" id="magicButton">✨ FELIZ ANIVERSARIO✨</button>
+            </div>
+
+            <p style="text-align:center;font-size:0.7rem;color:rgba(74,44,58,0.2);margin-top:20px;letter-spacing:2px;">
+                Hecho con ❤️• 6 años
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================================
+        //  🛠️ CONFIGURACIÓN PERSONALIZABLE (¡CAMBIA AQUÍ!)
+        // ============================================================
+        const CONFIG = {
+            // --- Fechas ---
+            loveStartDate: '2020-06-15', // <-- CAMBIA (AAAA-MM-DD)
+
+            // --- Nombres ---
+            herName: 'Wendy', // <-- CAMBIA
+            yourName: 'Anibal', // <-- CAMBIA
+
+            // --- Mensaje de la carta (efecto máquina) ---
+            letterMessage: `Han pasado <strong>6 años hermosos</strong> desde esa primera visita y desde esos primeros besos. En cada sonrisa tuya, en cada abrazo, veo a esa mujer especial. Hoy celebro no solo el tiempo, sino cada instante a tu lado. Esta página es una parte de mi corazón hecha código para ti, soy malo haciendo cartas manuales pero quizas un poco mejor haciendolas digitales. TE AMO ❤️.`, // <-- CAMBIA
+
+            // --- URL de la música (MP3) ---
+            musicUrl: './mp3/Maluma - ADMV (Official Video).mp3',
+
+            // ============================================================
+            //  📸 CARRUSEL: AQUÍ PONES TUS FOTOS Y TEXTOS
+            //  - "img": URL de tu imagen (súbela a Imgur/Postimages)
+            //  - "caption": Texto que aparecerá debajo de esa foto
+            //  Puedes añadir o quitar elementos, el carrusel se adapta solo
+            // ============================================================
+            carouselSlides: [{
+                img: './img/primera.jpg',
+                caption: '✨ Primeros recuerdos juntos'
+            },
+            {
+                img: './img/cuarta.jpg',
+                caption: '❤️ Tu primer cumpleaños juntos'
+            },
+            
+            {
+                img: './img/segunda.jpg',
+                caption: '🌅 Nuestro primer viaje'
+            }, {
+                img: './img/tercera.jpg',
+                caption: '💫 Por mas momentos asi'
+            },  {
+                img: './img/quinta.jpg',
+                caption: '🌟 Primeras combinadas de oufits'
+            }, {
+                img: './img/sexta.jpg',
+                caption: '💖 6 años y aún más enamorado'
+            }]
+        };
+
+        // ============================================================
+        // 1. PARTÍCULAS DE FONDO
+        // ============================================================
+        (function createParticles() {
+            const container = document.getElementById('particles-container');
+            const emojis = ['❤️', '✦', '💕', '🌹', '✨', '💖'];
+            for (let i = 0; i < 18; i++) {
+                const el = document.createElement('div');
+                el.className = 'floating-particle';
+                el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+                el.style.animationDuration = (12 + Math.random() * 18) + 's';
+                el.style.animationDelay = (Math.random() * 20) + 's';
+                el.style.opacity = 0.15 + Math.random() * 0.2;
+                container.appendChild(el);
+            }
+        })();
+
+        // ============================================================
+        // 2. MÚSICA
+        // ============================================================
+        let audioContext = null;
+        let audioBuffer = null;
+        let audioSource = null;
+        let isPlaying = false;
+        let musicLoaded = false;
+
+        const musicToggle = document.getElementById('musicToggle');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicLabel = document.getElementById('musicLabel');
+
+        async function loadMusic() {
+            if (musicLoaded) return;
+            try {
+                const response = await fetch(CONFIG.musicUrl);
+                const arrayBuffer = await response.arrayBuffer();
+                audioContext = new(window.AudioContext || window.webkitAudioContext)();
+                audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                musicLoaded = true;
+            } catch (e) {
+                console.warn('No se pudo cargar la música:', e);
+                musicToggle.style.display = 'none';
+            }
+        }
+
+        function playMusic() {
+            if (!musicLoaded || !audioBuffer) return;
+            if (audioSource) {
+                audioSource.stop();
+                audioSource.disconnect();
+            }
+            
+            audioSource = audioContext.createBufferSource();
+            audioSource.buffer = audioBuffer;
+            audioSource.loop = true;
+            audioSource.connect(audioContext.destination);
+            audioSource.start(0);
+            isPlaying = true;
+            musicIcon.textContent = '🔊';
+            musicLabel.textContent = 'Música';
+        }
+
+        function stopMusic() {
+            if (audioSource) {
+                audioSource.stop();
+                audioSource.disconnect();
+                audioSource = null;
+            }
+            isPlaying = false;
+            musicIcon.textContent = '🔇';
+            musicLabel.textContent = 'Silencio';
+        }
+
+        musicToggle.addEventListener('click', async function(e) {
+            e.stopPropagation();
+            if (!musicLoaded) {
+                await loadMusic();
+                if (!musicLoaded) return;
+            }
+            if (audioContext && audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
+            if (isPlaying) {
+                stopMusic();
+            } else {
+                playMusic();
+            }
+        });
+
+        document.addEventListener('click', () => {
+            if (!musicLoaded) loadMusic();
+        }, { once: true });
+
+        // ============================================================
+        // 3. SOBRE QUE SE ABRE
+        // ============================================================
+        const envelopeTrigger = document.getElementById('envelopeTrigger');
+        const envelope = document.getElementById('envelope');
+        const envelopeScreen = document.getElementById('envelope-screen');
+        const letterScreen = document.getElementById('letter-screen');
+
+        envelopeTrigger.addEventListener('click', function() {
+            envelope.classList.add('open');
+
+             // ✅ NUEVO: Iniciar música al abrir
+    if (!musicLoaded) {
+        loadMusic().then(() => {
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            playMusic();
+        });
+    } else {
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        playMusic();
+    }
+
+            setTimeout(() => {
+                envelopeScreen.classList.add('hidden');
+                letterScreen.classList.add('visible');
+                letterScreen.style.display = 'flex';
+
+                updateCounter();
+                startTypewriter();
+
+                // Lluvia de corazones al abrir
+                for (let i = 0; i < 14; i++) {
+                    setTimeout(() => createBurstHeart(), i * 70);
+                }
+            }, 900);
+        });
+
+        // ============================================================
+        // 4. CONTADOR
+        // ============================================================
+        function updateCounter() {
+            const start = new Date(CONFIG.loveStartDate);
+            const now = new Date();
+            let years = now.getFullYear() - start.getFullYear();
+            let months = now.getMonth() - start.getMonth();
+            let days = now.getDate() - start.getDate();
+
+            if (days < 0) { months--;
+                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                days += prevMonth.getDate(); }
+            if (months < 0) { years--;
+                months += 12; }
+            if (years < 0) years = 0;
+
+            document.getElementById('counterBox').innerHTML = `
+                        <div class="counter-item"><span class="num">${years}</span><span class="label">Años</span></div>
+                        <div class="counter-item"><span class="num">${months}</span><span class="label">Meses</span></div>
+                        <div class="counter-item"><span class="num">${days}</span><span class="label">Días</span></div>
+                    `;
+        }
+        setInterval(updateCounter, 60000);
+
+        // ============================================================
+        // 5. MÁQUINA DE ESCRIBIR
+        // ============================================================
+        function startTypewriter() {
+            const container = document.getElementById('greetingText');
+            const rawMessage = CONFIG.letterMessage;
+            container.innerHTML =
+                `<span class="typewriter" id="typewriterTarget"></span><span class="signature" style="display:block;text-align:right;margin-top:15px;">— ${CONFIG.yourName}</span>`;
+            const target = document.getElementById('typewriterTarget');
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = rawMessage;
+            const plainText = tempDiv.textContent || tempDiv.innerText || '';
+
+            let index = 0;
+            const speed = 35;
+
+            function typeNext() {
+                if (index < plainText.length) {
+                    target.textContent = plainText.substring(0, index + 1);
+                    index++;
+                    setTimeout(typeNext, speed);
+                } else {
+                    target.classList.remove('typewriter');
+                    container.innerHTML = rawMessage +
+                        `<div class="signature" style="display:block;text-align:right;margin-top:15px;">— ${CONFIG.yourName}</div>`;
+                }
+            }
+            setTimeout(typeNext, 400);
+        }
+
+        // ============================================================
+        // 6. CARRUSEL (NUEVA VERSIÓN CON TEXTO)
+        // ============================================================
+        let currentSlide = 0;
+        const slides = CONFIG.carouselSlides;
+        const track = document.getElementById('carouselTrack');
+        const dotsContainer = document.getElementById('carouselDots');
+        const captionText = document.getElementById('captionText');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let autoPlayInterval = null;
+        let isTransitioning = false;
+
+        function buildCarousel() {
+            // Limpiar
+            track.innerHTML = '';
+            dotsContainer.innerHTML = '';
+
+            // Crear slides
+            slides.forEach((slide, index) => {
+                const slideDiv = document.createElement('div');
+                slideDiv.className = 'carousel-slide';
+                const img = document.createElement('img');
+                img.src = slide.img;
+                img.alt = `Recuerdo ${index + 1}`;
+                img.loading = 'lazy';
+                slideDiv.appendChild(img);
+                track.appendChild(slideDiv);
+            });
+
+            // Crear dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = 'dot' + (index === 0 ? ' active' : '');
+                dot.setAttribute('data-index', index);
+                dot.addEventListener('click', () => goToSlide(index));
+                dotsContainer.appendChild(dot);
+            });
+
+            // Actualizar caption inicial
+            if (slides.length > 0) {
+                captionText.textContent = slides[0].caption;
+            }
+
+            // Actualizar estado del auto-play
+            startAutoPlay();
+        }
+
+        function goToSlide(index) {
+            if (isTransitioning) return;
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+            if (index === currentSlide) return;
+
+            isTransitioning = true;
+            currentSlide = index;
+            const offset = -currentSlide * 100;
+            track.style.transform = `translateX(${offset}%)`;
+
+            // Actualizar dots
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+
+            // Actualizar caption con animación suave
+            captionText.style.opacity = '0.5';
+            setTimeout(() => {
+                captionText.textContent = slides[currentSlide].caption;
+                captionText.style.opacity = '1';
+            }, 200);
+
+            // Reanudar auto-play después de la interacción manual
+            resetAutoPlay();
+
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 600);
+        }
+
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            goToSlide(currentSlide - 1);
+        }
+
+        // Auto-play (desliza cada 10 segundos)
+        function startAutoPlay() {
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+            autoPlayInterval = setInterval(() => {
+                if (!isTransitioning) {
+                    nextSlide();
+                }
+            }, 10000);
+        }
+
+        function resetAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+                startAutoPlay();
+            }
+        }
+
+        // Eventos de los botones
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            prevSlide();
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            nextSlide();
+        });
+
+        // ============================================================
+        // 7. GESTOS TÁCTILES (SWIPE) PARA EL CARRUSEL
+        // ============================================================
+        const carouselContainer = document.getElementById('carouselContainer');
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let isSwiping = false;
+
+        carouselContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            isSwiping = true;
+            // Pausar auto-play mientras toca
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+        }, { passive: true });
+
+        carouselContainer.addEventListener('touchmove', (e) => {
+            // Prevenir scroll vertical mientras se desliza horizontalmente
+            if (isSwiping) {
+                const deltaX = e.changedTouches[0].screenX - touchStartX;
+                if (Math.abs(deltaX) > 10) {
+                    e.preventDefault();
+                }
+            }
+        }, { passive: false });
+
+        carouselContainer.addEventListener('touchend', (e) => {
+            if (!isSwiping) return;
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+            isSwiping = false;
+            // Reanudar auto-play después de un breve retraso
+            setTimeout(() => {
+                resetAutoPlay();
+            }, 3000);
+        }, { passive: true });
+
+        // Si el mouse entra, pausar; si sale, reanudar
+        carouselContainer.addEventListener('mouseenter', () => {
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+        });
+
+        carouselContainer.addEventListener('mouseleave', () => {
+            resetAutoPlay();
+        });
+
+        // ============================================================
+        // 8. CORAZONES EXPLOSIÓN
+        // ============================================================
+        function createBurstHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'burst-heart';
+            const emojis = ['❤️', '💖', '✨', '💕', '💗', '🌹', '💫'];
+            heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            const x = 20 + Math.random() * 60;
+            const y = 20 + Math.random() * 60;
+            heart.style.left = x + 'vw';
+            heart.style.top = y + 'vh';
+            const tx = (Math.random() - 0.5) * 400;
+            const ty = (Math.random() - 0.5) * 400 - 200;
+            heart.style.setProperty('--tx', tx + 'px');
+            heart.style.setProperty('--ty', ty + 'px');
+            heart.style.fontSize = (1.5 + Math.random() * 2.5) + 'rem';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1600);
+        }
+
+       
+
+        // ============================================================
+        // 10. REEMPLAZAR NOMBRES E INICIAR CARRUSEL
+        // ============================================================
+        document.querySelectorAll('*').forEach(el => {
+            el.childNodes.forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    let text = node.textContent;
+                    if (text.includes('[NOMBRE_ELLA]')) {
+                        node.textContent = text.replace(/\[NOMBRE_ELLA\]/g, CONFIG.herName);
+                    }
+                    if (text.includes('[TU_NOMBRE]')) {
+                        node.textContent = text.replace(/\[TU_NOMBRE\]/g, CONFIG.yourName);
+                    }
+                }
+            });
+        });
+
+        // Inicializar el carrusel al cargar la página
+        buildCarousel();
+
+        console.log('💖 Página mágica con carrusel lista. ¡Felices 6 años!');
+    </script>
+</body>
+</html>
